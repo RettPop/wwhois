@@ -1,0 +1,38 @@
+#!/bin/sh
+
+chWhois()
+{
+    whoisout=`whois $1`
+	whogr=`echo "$whoisout" | grep "No match for"` 
+	if [ "$whogr" == "" ]
+    then
+	    whogr=`echo $whoisout | grep "NOT FOUND"` 
+    fi
+
+    if [ "$whogr" == "" ]
+	then
+	    echo "$1 is taken"
+	else
+	    echo "$1 is free"
+	fi
+}
+
+#Check for local domains
+chLWhois()
+{
+	whoisout=`whois -h $2 $1` 
+	whogr=`echo $whoisout | grep "$3"` 
+	if [ "$whogr" == "" ]
+	then
+	    echo "$1 is taken"
+	else
+	    echo "$1 is free"
+	fi
+}
+
+chWhois $1.com
+chWhois $1.net
+chWhois $1.org
+chLWhois $1.com.ua whois.ua "No entries"
+chLWhois $1.net.ua whois.ua "No entries"
+chLWhois $1.org.ua whois.ua "No entries"
